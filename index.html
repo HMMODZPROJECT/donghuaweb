@@ -3,201 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>hmmodzvip server</title>
+    <title>Raihan Dev</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-    body {
-    font-family: 'Plus Jakarta Sans', sans-serif; 
-    scroll-behavior: smooth; 
-    overflow-x: hidden; 
-    margin: 0; 
-    background: #000000; 
-    -webkit-font-smoothing: antialiased;
-}
-
-.star, .sway, .galaxy-core {
-    will-change: transform;
-    transform: translateZ(0);
-}
-
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: #000000; }
-::-webkit-scrollbar-thumb { 
-    background: #333333; 
-    border-radius: 10px; 
-}
-
-#galaxy-container {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    z-index: -1;
-    background: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #000000 100%);
-    contain: strict;
-}
-
-.galaxy-core {
-    position: absolute;
-    top: 50%; left: 50%;
-    width: 1px; height: 1px;
-    background: #ffffff; 
-    border-radius: 50%;
-    box-shadow: 0 0 60px 30px rgba(255, 255, 255, 0.1);
-    animation: pulseCore 5s ease-in-out infinite;
-}
-
-@keyframes pulseCore {
-    0%, 100% { opacity: 0.2; }
-    50% { opacity: 0.5; }
-}
-
-.star {
-    position: absolute;
-    background: #ffffff; 
-    border-radius: 50%;
-    opacity: 0.6;
-    box-shadow: 0 0 5px #ffffff;
-    animation: orbit linear infinite;
-}
-
-@keyframes orbit {
-    from { transform: rotate(0deg) translateX(var(--distance)) rotate(0deg); }
-    to { transform: rotate(360deg) translateX(var(--distance)) rotate(-360deg); }
-}
-
-.ios-card { 
-    background: rgba(255, 255, 255, 0.05); 
-    backdrop-filter: blur(20px) saturate(180%); 
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.1); 
-    border-radius: 28px;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.ios-card:hover { 
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.2);
-    transform: scale(1.02);
-}
-
-.gradient-text { 
-    background: linear-gradient(135deg, #fff 0%, #888 100%); 
-    -webkit-background-clip: text; 
-    -webkit-text-fill-color: transparent; 
-}
-
-.music-btn, .refresh-btn {
-    position: fixed;
-    z-index: 100;
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.music-btn { 
-    bottom: 30px; 
-    right: 30px; 
-    width: 54px; 
-    height: 54px; 
-    border-radius: 50%; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-}
-
-.refresh-btn { 
-    top: 25px; 
-    right: 25px; 
-    padding: 0 20px; 
-    height: 48px; 
-    border-radius: 24px; 
-    display: flex; 
-    align-items: center; 
-    gap: 10px; 
-}
-
-.refresh-btn span { 
-    font-size: 11px; 
-    font-weight: 700; 
-    text-transform: uppercase; 
-    letter-spacing: 1px; 
-    color: white; 
-}
-
-.status-indicator {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(255, 255, 255, 0.05);
-    padding: 6px 14px;
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    margin-bottom: 20px;
-}
-
-.led-lamp { width: 8px; height: 8px; border-radius: 50%; }
-.led-online { background: #00ff88; box-shadow: 0 0 10px #00ff88; animation: blinkStatus 2s infinite; }
-.led-maintenance { background: #ff3b30; box-shadow: 0 0 10px #ff3b30; }
-
-@keyframes blinkStatus { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-.spinning { animation: spin 5s linear infinite; }
-@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-.video-wrapper {
-    margin-top: 2rem;
-    width: 96%;
-    max-width: 480px;
-    border-radius: 35px;
-    overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: #000;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    }
-        
+        :root {
+            --primary: #10b981;
+            --bg-dark: #0a0a0c;
+        }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            scroll-behavior: smooth; 
+            overflow-x: hidden; 
+            margin: 0; 
+            background: var(--bg-dark); 
+            -webkit-font-smoothing: antialiased;
+            color: #e2e8f0;
+        }
+        #galaxy-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 50%, #111827 0%, #000000 100%);
+        }
+        .star {
+            position: absolute;
+            background: #ffffff;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: orbit linear infinite;
+        }
+        @keyframes orbit {
+            from { transform: rotate(0deg) translateX(var(--distance)) rotate(0deg); }
+            to { transform: rotate(360deg) translateX(var(--distance)) rotate(-360deg); }
+        }
+        .ios-card { 
+            background: rgba(23, 23, 26, 0.7); 
+            backdrop-filter: blur(12px); 
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08); 
+            border-radius: 24px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .ios-card:hover { 
+            border-color: var(--primary);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        }
+        .ios-card:active { transform: scale(0.96); }
+        .ios-card::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: white;
+            opacity: 0;
+            transition: opacity 0.2s;
+            pointer-events: none;
+        }
+        .ios-card:active::after { opacity: 0.15; }
+        .gradient-text { 
+            background: linear-gradient(135deg, #fff 30%, var(--primary) 100%); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+        }
+        .music-btn, .refresh-btn {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .led-online {
+            background: var(--primary);
+            box-shadow: 0 0 12px var(--primary);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .video-container {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+            overflow: hidden;
+        }
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+        .ios-card:hover video { opacity: 1; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: var(--bg-dark); }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+        .spinning { animation: spin 5s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     </style>
 </head>
-<body class="text-white antialiased">
+<body>
 
-    <div id="galaxy-container">
-        <div class="galaxy-core"></div>
-    </div>
+    <div id="galaxy-container"></div>
 
-    <div id="refreshToggle" class="refresh-btn shadow-2xl" onclick="forceRefresh()">
-        <i class="fas fa-sync-alt text-white text-xs"></i>
-        <span>Refresh Server</span>
+    <div id="refreshToggle" class="fixed top-6 right-6 z-[1000] flex items-center gap-3 px-5 py-3 rounded-full refresh-btn cursor-pointer transition-all hover:bg-white/10 shadow-2xl" onclick="forceRefresh()">
+        <i class="fas fa-redo-alt text-white text-xs"></i>
+        <span class="text-[10px] font-extrabold uppercase tracking-widest text-white">Refresh Server</span>
     </div>
 
     <audio id="myAudio" loop preload="none">
         <source src="https://files.catbox.moe/sdrjqo.mp3" type="audio/mpeg">
     </audio>
 
-    <div id="musicToggle" class="music-btn shadow-xl">
-        <i id="musicIcon" class="fas fa-play text-sm"></i>
+    <div id="musicToggle" class="fixed bottom-8 right-8 z-[100] w-14 h-14 rounded-full music-btn flex items-center justify-center cursor-pointer shadow-2xl">
+        <i id="musicIcon" class="fas fa-play text-sm text-white"></i>
     </div>
 
-    <nav class="fixed w-full z-50 px-8 py-5 flex justify-between items-center bg-white/10 backdrop-blur-xl border-b border-white/10">
-        <div class="text-lg font-bold tracking-tight"><i class="fas fa-circle text-[8px] text-red-500 mr-2 align-middle"></i>Raihan Dev</div>
+    <nav class="fixed w-full z-50 px-8 py-6 flex justify-between items-center bg-[#0a0a0c]/80 backdrop-blur-xl border-b border-white/5">
+        <div class="text-xl font-black tracking-tighter flex items-center gap-2">
+            <div class="w-2 h-2 bg-emerald-500 rounded-full"></div>
+            RAIHAN<span class="text-emerald-500">DEV</span>
+        </div>
     </nav>
 
     <main class="relative z-10">
-        <section class="pt-32 pb-16 flex flex-col items-center text-center px-6">
-            <div class="max-w-4xl flex flex-col items-center">
-                
-                <div class="status-indicator">
-                    <div id="statusLed" class="led-lamp led-online"></div>
-                    <span id="statusText" class="text-[10px] font-bold uppercase tracking-widest text-white/90">Server Online</span>
-                </div>
-
-                <h1 class="text-6xl md:text-8xl font-bold mb-8 tracking-tighter leading-tight gradient-text">
-                    Raihan Dev
-                </h1>
-                <p id="typewriter" class="text-white/80 text-lg md:text-xl font-medium leading-relaxed min-h-[3rem]"></p>
-                
-                <div class="video-wrapper ios-card">
+        <section class="pt-40 pb-20 flex flex-col items-center text-center px-6">
+            <div class="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 mb-8">
+                <div id="statusLed" class="w-2 h-2 rounded-full led-online"></div>
+                <span id="statusText" class="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-500">Server Operational</span>
+            </div>
+            <h1 class="text-6xl md:text-8xl font-black mb-8 tracking-tighter gradient-text">Raihan Dev</h1>
+            <p id="typewriter" class="text-slate-400 text-lg md:text-xl font-medium max-w-2xl min-h-[3rem] leading-relaxed"></p>
+            
+            <div class="mt-12 max-w-2xl w-full ios-card p-2">
+                <div class="rounded-[18px] overflow-hidden">
                     <video id="mainVideo" class="w-full h-auto block" autoplay muted loop playsinline preload="auto">
                         <source src="https://files.catbox.moe/kc3f3z.mp4" type="video/mp4">
                     </video>
@@ -205,104 +143,129 @@
             </div>
         </section>
 
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-5 max-w-5xl mx-auto mb-20 px-6">
-            <div class="ios-card p-6 text-center">
-                <i class="fas fa-code text-white text-xl mb-3"></i>
-                <div class="text-2xl font-bold">830+</div>
-                <div class="text-[10px] font-bold text-white/70 uppercase mt-1">Modded</div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto mb-32 px-6">
+            <div class="ios-card p-8 text-center">
+                <i class="fas fa-code text-emerald-500 text-2xl mb-4"></i>
+                <div class="text-3xl font-bold">830+</div>
+                <div class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-2">Modded</div>
             </div>
-            <div class="ios-card p-6 text-center">
-                <i class="fas fa-layer-group text-white text-xl mb-3"></i>
-                <div class="text-2xl font-bold">772+</div>
-                <div class="text-[10px] font-bold text-white/70 uppercase mt-1">Projects</div>
+            <div class="ios-card p-8 text-center">
+                <i class="fas fa-layer-group text-emerald-500 text-2xl mb-4"></i>
+                <div class="text-3xl font-bold">772+</div>
+                <div class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-2">Projects</div>
             </div>
-            <div class="ios-card p-6 text-center">
-                <i class="fas fa-bolt text-white text-xl mb-3"></i>
-                <div class="text-2xl font-bold">24/7</div>
-                <div class="text-[10px] font-bold text-white/70 uppercase mt-1">Online</div>
+            <div class="ios-card p-8 text-center">
+                <i class="fas fa-bolt text-emerald-500 text-2xl mb-4"></i>
+                <div class="text-3xl font-bold">24/7</div>
+                <div class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-2">Active</div>
             </div>
-            <div class="ios-card p-6 text-center">
-                <i class="fas fa-shield-alt text-white text-xl mb-3"></i>
-                <div class="text-2xl font-bold">Profesional</div>
-                <div class="text-[10px] font-bold text-white/70 uppercase mt-1">Profesional Owner</div>
+            <div class="ios-card p-8 text-center">
+                <i class="fas fa-user-shield text-emerald-500 text-2xl mb-4"></i>
+                <div class="text-3xl font-bold">Pro</div>
+                <div class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-2">Owner</div>
             </div>
         </div>
 
         <section id="about" class="py-20 px-6">
-            <div class="max-w-4xl mx-auto ios-card p-8 md:p-12 flex flex-col md:flex-row items-center gap-10">
-                <img src="https://files.catbox.moe/87kds4.png" class="w-40 h-40 md:w-56 md:h-56 rounded-[40px] object-cover shadow-2xl" loading="lazy">
+            <div class="max-w-5xl mx-auto ios-card p-8 md:p-16 flex flex-col md:flex-row items-center gap-12">
+                <div class="relative">
+                    <div class="absolute -inset-1 bg-emerald-500 rounded-[44px] blur opacity-25"></div>
+                    <img src="https://files.catbox.moe/87kds4.png" class="relative w-48 h-48 md:w-64 md:h-64 rounded-[40px] object-cover" loading="lazy">
+                </div>
                 <div class="text-center md:text-left">
-                    <h2 class="text-3xl font-bold mb-2">Muhammad Raihan Musalah</h2>
-                    <p class="text-white font-bold text-xs tracking-widest uppercase mb-4">Cracker & Developer</p>
-                    <p class="text-white/80 text-lg leading-relaxed font-normal">Spesialis dalam modifikasi aplikasi Android dan pengembangan sistem web yang optimal.</p>
+                    <h2 class="text-4xl font-bold mb-3">Muhammad Raihan Musalah</h2>
+                    <p class="text-emerald-500 font-black text-xs tracking-[0.3em] uppercase mb-6">Cracker & Fullstack Developer</p>
+                    <p class="text-slate-400 text-lg leading-relaxed">Spesialis dalam modifikasi tingkat lanjut aplikasi Android dan arsitektur sistem web modern yang scalable.</p>
                 </div>
             </div>
         </section>
 
-        <section id="work" class="py-20 px-6 max-w-6xl mx-auto">
-            <h2 class="text-2xl font-bold mb-12 tracking-tight opacity-90">stream ⬇️</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              <div class="ios-card overflow-hidden">
-                    <img src="https://files.catbox.moe/789y5k.jpg" class="w-full aspect-video object-cover" loading="lazy">
-                    <div class="p-6">
-                        <h3 class="font-bold text-lg mb-4">Nonton Anime</h3>
-                        <a href="https://s7.nontonanimeid.boats/" target="_blank" class="block w-full text-center border border-white/20 text-white text-[11px] font-bold py-3 rounded-full hover:bg-white/5 transition-colors">View Stream Anime</a>
-                    </div>
-                </div>
-                <div class="ios-card overflow-hidden">
-                    <img src="https://files.catbox.moe/bhl4u6.png" class="w-full aspect-video object-cover" loading="lazy">
-                    <div class="p-6">
-                        <h3 class="font-bold text-lg mb-4">Nonton Donghua</h3>
-                        <a href="https://donghuastream.org/" target="_blank" class="block w-full text-center bg-white text-black text-[11px] font-bold py-3 rounded-full hover:bg-gray-200 transition-colors">View Stream Donghua</a>
-                    </div>
-                </div>
-                <div class="ios-card overflow-hidden">
-                    <img src="https://files.catbox.moe/xxsal0.jpg" class="w-full aspect-video object-cover" loading="lazy">
-                    <div class="p-6">
-                        <h3 class="font-bold text-lg mb-4">Tonton Flim</h3>
-                        <a href="https://tv6.lk21official.cc/" target="_blank" class="block w-full text-center border border-white/20 text-white text-[11px] font-bold py-3 rounded-full hover:bg-white/5 transition-colors">View Flim</a>
-                    </div>
-                </div>
-                <div class="ios-card overflow-hidden">
-                    <img src="https://files.catbox.moe/fgeets.png" class="w-full aspect-video object-cover" loading="lazy">
-                    <div class="p-6">
-                        <h3 class="font-bold text-lg mb-4">Mangga H</h3>
-                        <a href="https://whatsapp.com/channel/0029Vb6yBbjCcW4y7ok3pN03" target="_blank" class="block w-full text-center border border-white/20 text-white text-[11px] font-bold py-3 rounded-full hover:bg-white/5 transition-colors">Comming Soon</a>
-                    </div>
-                </div>
+        <section id="work" class="py-32 px-6 max-w-7xl mx-auto">
+            <div class="mb-16">
+                <h2 class="text-sm font-black text-emerald-500 uppercase tracking-[0.4em] mb-4">Discovery</h2>
+                <h3 class="text-4xl font-bold">Live Streams ⬇️</h3>
             </div>
-        </section>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+                <div class="ios-card">
+                    <div class="video-container">
+                        <video autoplay muted loop playsinline>
+                            <source src="https://files.catbox.moe/7sirzz.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="p-8">
+                        <h4 class="font-bold text-xl mb-6 text-white">Nonton Anime</h4>
+                        <a href="https://s7.nontonanimeid.boats/" target="_blank" class="block w-full text-center py-4 rounded-full border border-emerald-500/30 text-emerald-500 text-xs font-black uppercase tracking-widest hover:bg-emerald-500 hover:text-black transition-all">Launch Anime</a>
+                    </div>
+                </div>
 
-        <section id="contact" class="py-20 text-center px-6">
-            <div class="ios-card max-w-2xl mx-auto p-12">
-                <h2 class="text-3xl font-bold mb-8">Ready To Talk?</h2>
-                <a href="https://wa.me/6285137060301" target="_blank" class="inline-flex items-center gap-3 bg-[#25D366] text-white px-10 py-4 rounded-full font-bold shadow-xl hover:scale-105 transition-transform duration-300">
-                    <i class="fab fa-whatsapp text-xl"></i> WhatsApp Raihan
+                <div class="ios-card">
+                    <div class="video-container">
+                        <video autoplay muted loop playsinline>
+                            <source src="https://files.catbox.moe/j53hpm.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="p-8">
+                        <h4 class="font-bold text-xl mb-6 text-white">Nonton Donghua</h4>
+                        <a href="https://donghuastream.org/" target="_blank" class="block w-full text-center py-4 rounded-full bg-emerald-500 text-black text-xs font-black uppercase tracking-widest hover:bg-emerald-400 transition-all">Launch Donghua</a>
+                    </div>
+                </div>
+
+                <div class="ios-card">
+                    <div class="video-container">
+                        <video autoplay muted loop playsinline>
+                            <source src="https://files.catbox.moe/ujyd9u.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="p-8">
+                        <h4 class="font-bold text-xl mb-6 text-white">Tonton Film</h4>
+                        <a href="https://tv6.lk21official.cc/" target="_blank" class="block w-full text-center py-4 rounded-full border border-emerald-500/30 text-emerald-500 text-xs font-black uppercase tracking-widest hover:bg-emerald-500 hover:text-black transition-all">Launch Cinema</a>
+                    </div>
+                </div>
+
+               <div class="ios-card">
+    <div class="video-container">
+        <video autoplay muted loop playsinline>
+            <source src="https://files.catbox.moe/yfpund.mp4" type="video/mp4">
+        </video>
+    </div>
+    <div class="p-8">
+        <h4 class="font-bold text-xl mb-6 text-white">Baca Mangga</h4>
+        <a href="https://wa.me/+6285137060301" target="_blank" class="block w-full text-center py-4 rounded-full border border-emerald-500/30 text-emerald-500 text-xs font-black uppercase tracking-widest hover:bg-emerald-500 hover:text-black transition-all">
+            Comming Soon
+        </a>
+    </div>
+</div>
+
+        <section id="contact" class="py-32 text-center px-6">
+            <div class="ios-card max-w-3xl mx-auto p-16 border-emerald-500/20 bg-emerald-500/5">
+                <h2 class="text-4xl font-black mb-10">Mulai Mengobrol</h2>
+                <a href="https://wa.me/6285137060301" target="_blank" class="inline-flex items-center gap-4 bg-[#25D366] text-white px-12 py-5 rounded-full font-black uppercase tracking-widest shadow-[0_10px_30px_rgba(37,211,102,0.3)] hover:scale-105 transition-all">
+                    <i class="fab fa-whatsapp text-2xl"></i> WhatsApp Raihan
                 </a>
             </div>
         </section>
     </main>
 
-    <footer class="py-12 text-center text-[10px] font-bold text-white/40 tracking-[0.3em] uppercase">
-        &copy; 2016 Raihan dev 
+    <footer class="py-20 text-center">
+        <div class="text-[10px] font-black text-slate-600 tracking-[0.6em] uppercase">
+            &copy; 2016 RAIHAN DEV &bull; 4!?2701
+        </div>
     </footer>
 
     <script>
         const container = document.getElementById('galaxy-container');
-        const fragment = document.createDocumentFragment();
-        for (let i = 0; i < 70; i++) {
+        for (let i = 0; i < 60; i++) {
             const star = document.createElement('div');
             star.className = 'star';
-            const size = Math.random() * 3 + 'px';
-            const dist = Math.random() * 500 + 50 + 'px';
-            star.style.width = size;
-            star.style.height = size;
+            const size = Math.random() * 2 + 'px';
+            const dist = Math.random() * 450 + 80 + 'px';
+            star.style.width = size; star.style.height = size;
             star.style.setProperty('--distance', dist);
-            star.style.animationDuration = Math.random() * 40 + 30 + 's';
+            star.style.animationDuration = Math.random() * 40 + 20 + 's';
             star.style.top = '50%'; star.style.left = '50%';
-            fragment.appendChild(star);
+            container.appendChild(star);
         }
-        container.appendChild(fragment);
 
         const audio = document.getElementById('myAudio');
         const btn = document.getElementById('musicToggle');
@@ -310,37 +273,17 @@
         btn.addEventListener('click', () => {
             if (audio.paused) {
                 audio.play();
-                icon.className = 'fas fa-pause text-sm';
+                icon.className = 'fas fa-pause text-sm text-emerald-500';
                 btn.classList.add('spinning');
             } else {
                 audio.pause();
-                icon.className = 'fas fa-play text-sm';
+                icon.className = 'fas fa-play text-sm text-white';
                 btn.classList.remove('spinning');
             }
         });
 
         function forceRefresh() {
-            const refreshBtn = document.getElementById('refreshToggle');
-            const refreshIcon = refreshBtn.querySelector('i');
-            refreshIcon.classList.add('fa-spin');
-            setTimeout(() => {
-                window.location.reload(true);
-            }, 500);
-        }
-
-        function checkServerStatus() {
-            const isMaintenance = false; 
-            const led = document.getElementById('statusLed');
-            const text = document.getElementById('statusText');
-            if (isMaintenance) {
-                led.className = 'led-lamp led-maintenance';
-                text.innerText = 'Maintenance';
-                text.style.color = '#ff3b30';
-            } else {
-                led.className = 'led-lamp led-online';
-                text.innerText = 'Server Online';
-                text.style.color = '#00ff88';
-            }
+            window.location.reload(true);
         }
 
         const typeText = "Project Raihan Dev, saya Raihan dan saya developer aplikasi serta website.";
@@ -354,9 +297,8 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            checkServerStatus();
             typeWriter();
-            document.getElementById('mainVideo').play().catch(() => {});
+            document.querySelectorAll('video').forEach(v => v.play().catch(() => {}));
         });
     </script>
 </body>
