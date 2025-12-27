@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Raihan Dev</title>
+    <title>Raihan Dev - hmmodz team</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -186,15 +186,25 @@
         <i id="musicIcon" class="fas fa-play text-sm text-white"></i>
     </div>
 
-    <nav class="fixed w-full z-50 px-8 py-6 flex justify-between items-center bg-[#0a0a0c]/80 backdrop-blur-xl border-b border-white/5">
-        <div class="text-xl font-black tracking-tighter flex items-center gap-2">
-            <div class="w-2 h-2 bg-emerald-500 rounded-full"></div>
-            <span class="text-emerald-500">hmmodz team</span>
+    <nav class="fixed w-full z-50 bg-[#0a0a0c]/80 backdrop-blur-xl border-b border-white/5">
+        <div class="px-8 py-5 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="text-xl font-black tracking-tighter flex items-center gap-2">
+                <div class="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                <span class="text-emerald-500">hmmodz team</span>
+            </div>
+
+            <div class="flex items-center gap-6">
+                <a href="#" class="text-[10px] font-black uppercase tracking-[0.2em] text-white/60 hover:text-emerald-500 transition-colors">Home</a>
+                <a href="#work" class="text-[10px] font-black uppercase tracking-[0.2em] text-white/60 hover:text-emerald-500 transition-colors">Streaming</a>
+                <a href="https://wa.me/6285137060301" target="_blank" class="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-500 border border-emerald-500/30 px-4 py-2 rounded-full bg-emerald-500/5 hover:bg-emerald-500 hover:text-black transition-all shadow-[0_0_15px_rgba(16,185,129,0.1)]">
+                    Contact Dev
+                </a>
+            </div>
         </div>
     </nav>
 
     <main class="relative z-10">
-        <section class="pt-40 pb-20 flex flex-col items-center text-center px-6">
+        <section class="pt-48 pb-20 flex flex-col items-center text-center px-6">
             <div class="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 mb-8">
                 <div id="statusLed" class="w-2 h-2 rounded-full led-online"></div>
                 <span id="statusText" class="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-500">Server Online</span>
@@ -265,6 +275,7 @@
                         <a href="https://wa.me/6285137060301" target="_blank" class="block w-full text-center py-4 rounded-full border border-emerald-500/30 text-emerald-500 text-xs font-black uppercase tracking-widest hover:bg-emerald-500 hover:text-black transition-all">COMING SOON</a>
                     </div>
                 </div>
+
                 <div class="ios-card">
                     <div class="video-container">
                         <video autoplay muted loop playsinline>
@@ -276,6 +287,7 @@
                         <a href="https://www.mediafire.com/file/6vlo63sdgz2jq66/Movie_Box_Premium.apk/file" target="_blank" class="block w-full text-center py-4 rounded-full border border-emerald-500/30 text-emerald-500 text-xs font-black uppercase tracking-widest hover:bg-emerald-500 hover:text-black transition-all">Download Apps</a>
                     </div>
                 </div>
+
                 <div class="ios-card">
                     <div class="video-container">
                         <video autoplay muted loop playsinline>
@@ -353,7 +365,7 @@
             });
         }
 
-        const typeText = "hahahaha, saya hmmodz dan saya akan kembali seperti dulu, welcome to my prime again😈";
+        const typeText = "Welcome To My Apps, Aplikasi ini Berguna Untuk Menonton Flim,Anime,Donghua Ataupun Membaca Manga.";
         let typeIdx = 0;
         function typeWriter() {
             if (typeIdx < typeText.length) {
@@ -376,4 +388,5 @@
         });
     </script>
 </body>
-</html>
+    </html>
+    
