@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stream Server</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            --primary: #00d2ff; 
+            --primary-glow: rgba(0, 210, 255, 0.4);
+            --bg-dark: #050505;
+        }
+        
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            scroll-behavior: smooth; overflow-x: hidden; margin: 0; background: var(--bg-dark); color: #e2e8f0;
+        }
+
+        /* Rain Effect */
+        #rain-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: #000; overflow: hidden; }
+        .drop { position: absolute; width: 1px; height: 25px; background: linear-gradient(transparent, var(--primary)); opacity: 0.4; animation: fall linear infinite; }
+        @keyframes fall { to { transform: translateY(100vh); } }
+
+        /* Navigation */
+        .ios-navbar { background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); position: fixed; top: 0; width: 100%; z-index: 100; }
+        #mobile-menu { transition: all 0.4s ease; max-height: 0; overflow: hidden; opacity: 0; background: rgba(5, 5, 5, 0.98); }
+        #mobile-menu.active { max-height: 400px; opacity: 1; padding: 20px 0; border-bottom: 1px solid var(--primary); }
+
+        /* UI Elements */
+        .ios-card { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(25px); border: 1px solid rgba(0, 210, 255, 0.1); border-radius: 32px; transition: 0.5s; overflow: hidden; }
+        .ios-card:hover { border-color: var(--primary); transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0, 210, 255, 0.15); }
+        
+        .video-container { width: 100%; height: 180px; background: #000; overflow: hidden; mask-image: linear-gradient(to bottom, black 80%, transparent); -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent); }
+        .video-container video { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
+
+        .btn-opening { background: rgba(0, 210, 255, 0.05); border: 1px solid rgba(0, 210, 255, 0.2); color: var(--primary); padding: 14px; border-radius: 20px; font-weight: 800; text-transform: uppercase; font-size: 11px; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; }
+        .btn-opening:hover { background: var(--primary); color: #000; box-shadow: 0 0 20px var(--primary-glow); }
+
+        /* Modal DNS Modern */
+        #dns-modal { display: none; position: fixed; inset: 0; z-index: 200; align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px); }
+        .modal-content { background: rgba(20, 20, 20, 0.95); border: 1px solid rgba(0, 210, 255, 0.3); padding: 30px; border-radius: 40px; width: 90%; max-width: 400px; text-align: center; transform: scale(0.9); transition: 0.3s; }
+        #dns-modal.active { display: flex; }
+        #dns-modal.active .modal-content { transform: scale(1); }
+
+        .dns-item { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); padding: 15px; border-radius: 20px; margin-top: 15px; cursor: pointer; transition: 0.3s; }
+        .dns-item:hover { border-color: var(--primary); background: rgba(0, 210, 255, 0.05); }
+
+        /* Floating Buttons */
+        .floating-btn { position: fixed; bottom: 30px; z-index: 100; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; backdrop-filter: blur(10px); border: 1px solid rgba(0, 210, 255, 0.3); }
+        .music-btn { right: 30px; background: rgba(0, 210, 255, 0.1); }
+        .dns-trigger { right: 90px; background: rgba(0, 210, 255, 0.1); color: var(--primary); }
+        .floating-btn:hover { transform: scale(1.1); background: var(--primary); color: #000; }
+
+        .loading-spin { animation: spin 1s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .ticker-text { display: inline-block; white-space: nowrap; animation: ticker 25s linear infinite; }
+        @keyframes ticker { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
+    </style>
+</head>
+<body>
+
+    <div id="rain-container"></div>
+
+    <audio id="bgMusic" loop><source src="https://files.catbox.moe/45y0ja.mp4" type="audio/mpeg"></audio>
+
+    <div id="dns-modal" onclick="closeDns()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="w-16 h-16 bg-cyan-500/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-cyan-500/30">
+                <i class="fas fa-shield-halved text-2xl text-cyan-400"></i>
+            </div>
+            <h2 class="text-xl font-bold mb-2">DNS Setup</h2>
+            <p class="text-xs text-slate-400 mb-6">Gunakan DNS ini untuk memblokir iklan di aplikasi ini.</p>
+            
+            <div class="dns-item text-left" onclick="copyDns('dns.adguard.com')">
+                <p class="text-[10px] font-bold text-cyan-400 uppercase mb-1">AdGuard DNS</p>
+                <p class="text-sm font-mono text-white">dns.adguard.com</p>
+            </div>
+
+            <div class="dns-item text-left" onclick="copyDns('family.adguard-dns.com')">
+                <p class="text-[10px] font-bold text-emerald-400 uppercase mb-1">AdGuard Family</p>
+                <p class="text-sm font-mono text-white">family.adguard-dns.com</p>
+            </div>
+
+            <button onclick="closeDns()" class="mt-8 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-white">Kembali</button>
+        </div>
+    </div>
+
+    <div class="floating-btn dns-trigger" onclick="openDns()" title="Setup DNS">
+        <i class="fas fa-shield-virus"></i>
+    </div>
+    <div class="floating-btn music-btn" onclick="toggleMusic()">
+        <i id="music-icon" class="fas fa-play"></i>
+    </div>
+
+    <nav class="ios-navbar">
+        <div class="px-6 py-4 flex items-center justify-between max-w-7xl mx-auto">
+            <div class="flex items-center gap-4">
+                <button onclick="toggleMenu()" class="p-2 hover:bg-white/5 rounded-xl transition-all">
+                    <i id="menu-icon" class="fas fa-bars-staggered text-xl text-white"></i>
+                </button>
+                <span class="text-xl font-black italic tracking-tighter">hmmodz<span class="text-cyan-400">team</span></span>
+            </div>
+            <button onclick="refreshServer(this)" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:text-cyan-400 transition-all">
+                <i class="fas fa-sync-alt"></i>
+            </button>
+        </div>
+        <div id="mobile-menu" class="px-10">
+            <div class="flex flex-col gap-6 py-4">
+                <a href="#" class="text-sm font-bold text-white/70 hover:text-cyan-400">Home</a>
+                <a href="#work" class="text-sm font-bold text-white/70 hover:text-cyan-400">Streaming</a>
+                <a href="https://wa.me/6285137060301" class="text-sm font-bold text-cyan-400">Contact Dev</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="relative z-10 pt-32">
+        <section class="pb-10 flex flex-col items-center text-center px-6">
+            <div class="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/20 mb-8">
+                <div class="w-2 h-2 rounded-full bg-cyan-500 animate-pulse"></div>
+                <span class="text-[10px] font-black uppercase tracking-[0.2em] text-cyan-400">Blue Rain Protocol Active</span>
+            </div>
+            <h1 class="text-6xl md:text-8xl font-black mb-6 tracking-tighter italic">hmmodzvip<br><span class="text-cyan-400"></span></h1>
+            <p id="typewriter" class="text-slate-400 text-sm md:text-base font-medium max-w-xl min-h-[3rem]"></p>
+        </section>
+
+        <section class="px-6 mb-12 max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div class="bg-white/5 border border-white/5 p-5 rounded-3xl text-center">
+                <p class="text-[9px] uppercase tracking-widest text-slate-500 font-bold">Visitors</p>
+                <p class="text-xl font-black">336,942</p>
+            </div>
+            <div class="bg-white/5 border border-white/5 p-5 rounded-3xl text-center">
+                <p class="text-[9px] uppercase tracking-widest text-slate-500 font-bold">Version</p>
+                <p class="text-xl font-black text-white">v2.118.12</p>
+            </div>
+            <div class="bg-white/5 border border-white/5 p-5 rounded-3xl text-center col-span-2 md:col-span-1">
+                <p class="text-[9px] uppercase tracking-widest text-slate-500 font-bold">Status</p>
+                <p class="text-xl font-black text-cyan-400">ONLINE</p>
+            </div>
+        </section>
+
+        <div class="w-full bg-cyan-950/10 border-y border-white/5 py-3 mb-12 overflow-hidden">
+            <div class="ticker-text text-[10px] font-black uppercase tracking-[0.3em] text-cyan-400">
+                +++ NEW UPDATE: ADD SERVER & FIXED +++ FAST STREAMING +++ JOIN OUR COMUNITY FOR REQUEST +++
+            </div>
+        </div>
+
+        <section id="work" class="px-6 max-w-7xl mx-auto pb-40">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                <div class="ios-card">
+                    <div class="video-container"><video autoplay muted loop playsinline><source src="https://files.catbox.moe/7sirzz.mp4"></video></div>
+                    <div class="p-8"><h4 class="font-bold text-xl mb-6">Nonton Anime</h4><a href="https://s7.nontonanimeid.boats/" class="btn-opening"><i class="fas fa-play"></i> Launch Anime</a></div>
+                </div>
+                <div class="ios-card">
+                    <div class="video-container"><video autoplay muted loop playsinline><source src="https://files.catbox.moe/j53hpm.mp4"></video></div>
+                    <div class="p-8"><h4 class="font-bold text-xl mb-6">Nonton Donghua</h4><a href="https://donghuastream.org/" class="btn-opening"><i class="fas fa-dragon"></i> Launch Donghua</a></div>
+                </div>
+                <div class="ios-card">
+                    <div class="video-container"><video autoplay muted loop playsinline><source src="https://files.catbox.moe/ujyd9u.mp4"></video></div>
+                    <div class="p-8"><h4 class="font-bold text-xl mb-6">Tonton Film</h4><a href="https://tv6.lk21official.cc/" class="btn-opening"><i class="fas fa-film"></i> Launch Cinema</a></div>
+                </div>
+                <div class="ios-card">
+                    <div class="video-container"><video autoplay muted loop playsinline><source src="https://files.catbox.moe/yfpund.mp4"></video></div>
+                    <div class="p-8"><h4 class="font-bold text-xl mb-6">Baca Manga</h4><a href="https://komiku.org/" class="btn-opening"><i class="fas fa-book-open"></i> Lihat Manga</a></div>
+                </div>
+                <div class="ios-card">
+                    <div class="video-container"><video autoplay muted loop playsinline><source src="https://files.catbox.moe/ujyd9u.mp4"></video></div>
+                    <div class="p-8"><h4 class="font-bold text-xl mb-6">Download App</h4><a href="https://www.mediafire.com/file/6vlo63sdgz2jq66/Movie_Box_Premium.apk/file" class="btn-opening"><i class="fas fa-download"></i> Get MovieBox</a></div>
+                </div>
+                <div class="ios-card">
+                    <div class="video-container"><video autoplay muted loop playsinline><source src="https://files.catbox.moe/kc3f3z.mp4"></video></div>
+                    <div class="p-8"><h4 class="font-bold text-xl mb-6">Grup Chat</h4><a href="https://chat.whatsapp.com/EKSZJRvIMpW8sZKsxanpuD" class="btn-opening"><i class="fab fa-whatsapp"></i> Join Team</a></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Music Logic
+        const music = document.getElementById('bgMusic');
+        const mIcon = document.getElementById('music-icon');
+        function toggleMusic() {
+            if (music.paused) { music.play(); mIcon.className = "fas fa-pause"; }
+            else { music.pause(); mIcon.className = "fas fa-play"; }
+        }
+
+        // DNS Modal Logic
+        function openDns() { document.getElementById('dns-modal').classList.add('active'); }
+        function closeDns() { document.getElementById('dns-modal').classList.remove('active'); }
+        function copyDns(text) {
+            navigator.clipboard.writeText(text);
+            alert("DNS Copied: " + text + "\nSilakan tempel di setting Private DNS HP Anda.");
+        }
+
+        // Refresh Logic
+        function refreshServer(btn) {
+            const icon = btn.querySelector('i');
+            icon.classList.add('loading-spin');
+            setTimeout(() => { icon.classList.remove('loading-spin'); alert('Server Synchronized!'); }, 1500);
+        }
+
+        // Rain & Menu
+        const rain = document.getElementById('rain-container');
+        for (let i = 0; i < 80; i++) {
+            const drop = document.createElement('div');
+            drop.className = 'drop';
+            drop.style.left = Math.random() * 100 + 'vw';
+            drop.style.animationDuration = (Math.random() * 0.8 + 0.4) + 's';
+            drop.style.animationDelay = Math.random() * 2 + 's';
+            rain.appendChild(drop);
+        }
+
+        function toggleMenu() {
+            const m = document.getElementById('mobile-menu');
+            const i = document.getElementById('menu-icon');
+            m.classList.toggle('active');
+            i.className = m.classList.contains('active') ? 'fas fa-xmark text-xl text-cyan-400' : 'fas fa-bars-staggered text-xl text-white';
+        }
+
+        const typeText = "Platform streaming gratis dengan berbagai fiture, aplikasi ini masih dalam tahap pengembangan, JADI LAH SALAH SATU PENGGUNA AKTIF.";
+        let typeIdx = 0;
+        function typeWriter() {
+            if (typeIdx < typeText.length) {
+                document.getElementById("typewriter").textContent += typeText.charAt(typeIdx);
+                typeIdx++; setTimeout(typeWriter, 50);
+            }
+        }
+        window.onload = typeWriter;
+    </script>
+</body>
+</html>
