@@ -3,231 +3,232 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stream Server</title>
+    <title>Stream Server-hmmodz auth</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         :root {
-            --primary: #00d2ff; 
-            --primary-glow: rgba(0, 210, 255, 0.4);
-            --bg-dark: #050505;
+            --primary: #00f2fe;
+            --accent: #4facfe;
+            --bg-dark: #030303;
         }
         
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
-            scroll-behavior: smooth; overflow-x: hidden; margin: 0; background: var(--bg-dark); color: #e2e8f0;
+            margin: 0; background: var(--bg-dark); color: #f1f5f9;
+            overflow-x: hidden;
         }
 
-        /* Rain Effect */
-        #rain-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: #000; overflow: hidden; }
-        .drop { position: absolute; width: 1px; height: 25px; background: linear-gradient(transparent, var(--primary)); opacity: 0.4; animation: fall linear infinite; }
+        #rain-container { position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle at top, #0a0a0a 0%, #000 100%); }
+        .drop { position: absolute; width: 1px; height: 35px; background: linear-gradient(transparent, var(--primary)); opacity: 0.2; animation: fall linear infinite; }
         @keyframes fall { to { transform: translateY(100vh); } }
 
-        /* Navigation */
-        .ios-navbar { background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); position: fixed; top: 0; width: 100%; z-index: 100; }
-        #mobile-menu { transition: all 0.4s ease; max-height: 0; overflow: hidden; opacity: 0; background: rgba(5, 5, 5, 0.98); }
-        #mobile-menu.active { max-height: 400px; opacity: 1; padding: 20px 0; border-bottom: 1px solid var(--primary); }
-
-        /* UI Elements */
-        .ios-card { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(25px); border: 1px solid rgba(0, 210, 255, 0.1); border-radius: 32px; transition: 0.5s; overflow: hidden; }
-        .ios-card:hover { border-color: var(--primary); transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0, 210, 255, 0.15); }
+        .ios-navbar { background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border-bottom: 1px solid rgba(255, 255, 255, 0.03); position: fixed; top: 0; width: 100%; z-index: 100; }
         
-        .video-container { width: 100%; height: 180px; background: #000; overflow: hidden; mask-image: linear-gradient(to bottom, black 80%, transparent); -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent); }
-        .video-container video { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
+        .ios-card { 
+            background: linear-gradient(165deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
+            backdrop-filter: blur(15px); 
+            border: 1px solid rgba(255, 255, 255, 0.05); 
+            border-radius: 32px; 
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        .ios-card:hover { 
+            border-color: var(--primary); 
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px -12px rgba(0, 242, 254, 0.2);
+        }
+        
+        .video-container { width: 100%; height: 170px; background: #000; position: relative; overflow: hidden; }
+        .video-container video { width: 100%; height: 100%; object-fit: cover; opacity: 0.4; transition: 0.5s; }
+        .ios-card:hover video { opacity: 0.7; transform: scale(1.1); }
 
-        .btn-opening { background: rgba(0, 210, 255, 0.05); border: 1px solid rgba(0, 210, 255, 0.2); color: var(--primary); padding: 14px; border-radius: 20px; font-weight: 800; text-transform: uppercase; font-size: 11px; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; }
-        .btn-opening:hover { background: var(--primary); color: #000; box-shadow: 0 0 20px var(--primary-glow); }
+        .btn-opening { 
+            background: linear-gradient(90deg, var(--accent), var(--primary)); 
+            color: #000; 
+            padding: 14px; 
+            border-radius: 20px; 
+            font-weight: 800; 
+            font-size: 11px; 
+            letter-spacing: 1px;
+            transition: 0.4s; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 8px; 
+            width: 100%; 
+        }
+        .btn-opening:hover { filter: brightness(1.2); box-shadow: 0 0 20px rgba(0, 242, 254, 0.4); }
 
-        /* Modal DNS Modern */
-        #dns-modal { display: none; position: fixed; inset: 0; z-index: 200; align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px); }
-        .modal-content { background: rgba(20, 20, 20, 0.95); border: 1px solid rgba(0, 210, 255, 0.3); padding: 30px; border-radius: 40px; width: 90%; max-width: 400px; text-align: center; transform: scale(0.9); transition: 0.3s; }
-        #dns-modal.active { display: flex; }
-        #dns-modal.active .modal-content { transform: scale(1); }
+        .stats-box {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 28px;
+            padding: 20px;
+            transition: 0.3s;
+        }
+        .stats-box:hover { background: rgba(255, 255, 255, 0.04); border-color: rgba(255, 255, 255, 0.1); }
 
-        .dns-item { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); padding: 15px; border-radius: 20px; margin-top: 15px; cursor: pointer; transition: 0.3s; }
-        .dns-item:hover { border-color: var(--primary); background: rgba(0, 210, 255, 0.05); }
-
-        /* Floating Buttons */
-        .floating-btn { position: fixed; bottom: 30px; z-index: 100; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; backdrop-filter: blur(10px); border: 1px solid rgba(0, 210, 255, 0.3); }
-        .music-btn { right: 30px; background: rgba(0, 210, 255, 0.1); }
-        .dns-trigger { right: 90px; background: rgba(0, 210, 255, 0.1); color: var(--primary); }
-        .floating-btn:hover { transform: scale(1.1); background: var(--primary); color: #000; }
-
-        .loading-spin { animation: spin 1s linear infinite; }
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        .ticker-text { display: inline-block; white-space: nowrap; animation: ticker 25s linear infinite; }
-        @keyframes ticker { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
+        .floating-btn { position: fixed; bottom: 25px; z-index: 100; width: 50px; height: 50px; border-radius: 20px; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); transition: 0.3s; }
+        
+        .glow-text { text-shadow: 0 0 15px rgba(0, 242, 254, 0.5); }
     </style>
 </head>
 <body>
 
     <div id="rain-container"></div>
+    <audio id="bgMusic" loop preload="none"><source src="https://files.catbox.moe/45y0ja.mp4" type="audio/mpeg"></audio>
 
-    <audio id="bgMusic" loop><source src="https://files.catbox.moe/45y0ja.mp4" type="audio/mpeg"></audio>
-
-    <div id="dns-modal" onclick="closeDns()">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <div class="w-16 h-16 bg-cyan-500/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-cyan-500/30">
-                <i class="fas fa-shield-halved text-2xl text-cyan-400"></i>
+    <div id="dns-modal" class="hidden fixed inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-xl" onclick="this.classList.add('hidden')">
+        <div class="bg-zinc-900/90 border border-white/10 p-10 rounded-[45px] w-[90%] max-w-sm text-center" onclick="event.stopPropagation()">
+            <div class="w-16 h-16 bg-cyan-500/20 rounded-full flex items-center justify-center mx-auto mb-6"><i class="fas fa-shield-halved text-cyan-400 text-2xl"></i></div>
+            <h2 class="text-2xl font-black mb-2">Anti-Ads System</h2>
+            <p class="text-xs text-slate-400 mb-8 leading-relaxed">Gunakan DNS khusus untuk mematikan semua transmisi iklan server.</p>
+            <div class="p-5 bg-white/5 border border-white/5 rounded-3xl cursor-pointer hover:border-cyan-500 transition-all" onclick="copyDns('dns.adguard.com')">
+                <p class="text-[9px] text-cyan-400 font-black tracking-widest mb-1 uppercase">Recommended DNS</p>
+                <p class="text-sm font-mono">dns.adguard.com</p>
             </div>
-            <h2 class="text-xl font-bold mb-2">DNS Setup</h2>
-            <p class="text-xs text-slate-400 mb-6">Gunakan DNS ini untuk memblokir iklan di aplikasi ini.</p>
-            
-            <div class="dns-item text-left" onclick="copyDns('dns.adguard.com')">
-                <p class="text-[10px] font-bold text-cyan-400 uppercase mb-1">AdGuard DNS</p>
-                <p class="text-sm font-mono text-white">dns.adguard.com</p>
-            </div>
-
-            <div class="dns-item text-left" onclick="copyDns('family.adguard-dns.com')">
-                <p class="text-[10px] font-bold text-emerald-400 uppercase mb-1">AdGuard Family</p>
-                <p class="text-sm font-mono text-white">family.adguard-dns.com</p>
-            </div>
-
-            <button onclick="closeDns()" class="mt-8 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-white">Kembali</button>
         </div>
     </div>
 
-    <div class="floating-btn dns-trigger" onclick="openDns()" title="Setup DNS">
-        <i class="fas fa-shield-virus"></i>
-    </div>
-    <div class="floating-btn music-btn" onclick="toggleMusic()">
-        <i id="music-icon" class="fas fa-play"></i>
-    </div>
+    <div class="floating-btn right-6 bg-cyan-500/10" style="bottom: 90px;" onclick="document.getElementById('dns-modal').classList.remove('hidden')"><i class="fas fa-fingerprint text-cyan-400"></i></div>
+    <div class="floating-btn right-6 bg-white/5" onclick="toggleMusic()"><i id="music-icon" class="fas fa-play text-white"></i></div>
 
-    <nav class="ios-navbar">
-        <div class="px-6 py-4 flex items-center justify-between max-w-7xl mx-auto">
-            <div class="flex items-center gap-4">
-                <button onclick="toggleMenu()" class="p-2 hover:bg-white/5 rounded-xl transition-all">
-                    <i id="menu-icon" class="fas fa-bars-staggered text-xl text-white"></i>
-                </button>
-                <span class="text-xl font-black italic tracking-tighter">hmmodz<span class="text-cyan-400">team</span></span>
-            </div>
-            <button onclick="refreshServer(this)" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:text-cyan-400 transition-all">
-                <i class="fas fa-sync-alt"></i>
-            </button>
-        </div>
-        <div id="mobile-menu" class="px-10">
-            <div class="flex flex-col gap-6 py-4">
-                <a href="#" class="text-sm font-bold text-white/70 hover:text-cyan-400">Home</a>
-                <a href="#work" class="text-sm font-bold text-white/70 hover:text-cyan-400">Streaming</a>
-                <a href="https://wa.me/6285137060301" class="text-sm font-bold text-cyan-400">Contact Dev</a>
-            </div>
+    <nav class="ios-navbar px-8 py-5">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <span class="text-2xl font-black italic tracking-tighter glow-text uppercase">hmmodz<span class="text-cyan-400">vip</span></span>
+            <button onclick="location.reload()" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:rotate-180 transition-all duration-500"><i class="fas fa-sync-alt text-xs"></i></button>
         </div>
     </nav>
 
-    <main class="relative z-10 pt-32">
-        <section class="pb-10 flex flex-col items-center text-center px-6">
-            <div class="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/20 mb-8">
-                <div class="w-2 h-2 rounded-full bg-cyan-500 animate-pulse"></div>
-                <span class="text-[10px] font-black uppercase tracking-[0.2em] text-cyan-400">hmmodz server Protocol Active</span>
+    <main class="pt-32 px-6 max-w-7xl mx-auto pb-24">
+        <header class="text-center mb-16">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-[10px] font-black text-cyan-400 uppercase tracking-[0.2em] mb-6">
+                <div class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></div> hmmodz server v6.9 Active
             </div>
-            <h1 class="text-6xl md:text-8xl font-black mb-6 tracking-tighter italic">hmmodzvip<br><span class="text-cyan-400"></span></h1>
-            <p id="typewriter" class="text-slate-400 text-sm md:text-base font-medium max-w-xl min-h-[3rem]"></p>
+            <h1 class="text-6xl md:text-8xl font-black italic mb-6 tracking-tighter leading-none uppercase">HM MODZ <br><span class="text-cyan-400">STREAM</span></h1>
+            <p id="typewriter" class="text-slate-500 text-xs md:text-sm font-semibold tracking-wide max-w-md mx-auto min-h-[40px]"></p>
+        </header>
+
+        <section class="grid grid-cols-2 md:grid-cols-3 gap-5 mb-10">
+            <div class="stats-box backdrop-blur-md">
+                <p class="text-[9px] uppercase tracking-[0.2em] text-slate-500 font-bold mb-2">Total Visits</p>
+                <p class="text-2xl font-black" id="visit-count">0</p>
+            </div>
+            <div class="stats-box backdrop-blur-md">
+                <p class="text-[9px] uppercase tracking-[0.2em] text-slate-500 font-bold mb-2">System Version</p>
+                <p class="text-2xl font-black text-white">v6.9.1</p>
+            </div>
+            <div class="stats-box col-span-2 md:col-span-1 border-cyan-500/20 bg-cyan-500/5">
+                <p class="text-[9px] uppercase tracking-[0.2em] text-cyan-500 font-bold mb-2">Server Status</p>
+                <p class="text-2xl font-black text-cyan-400">ONLINE</p>
+            </div>
         </section>
 
-        <section class="px-6 mb-12 max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-3 gap-4">
-            <div class="bg-white/5 border border-white/5 p-5 rounded-3xl text-center">
-                <p class="text-[9px] uppercase tracking-widest text-slate-500 font-bold">Visitors</p>
-                <p class="text-xl font-black">38</p>
-            </div>
-            <div class="bg-white/5 border border-white/5 p-5 rounded-3xl text-center">
-                <p class="text-[9px] uppercase tracking-widest text-slate-500 font-bold">Version</p>
-                <p class="text-xl font-black text-white">v6.9</p>
-            </div>
-            <div class="bg-white/5 border border-white/5 p-5 rounded-3xl text-center col-span-2 md:col-span-1">
-                <p class="text-[9px] uppercase tracking-widest text-slate-500 font-bold">Status</p>
-                <p class="text-xl font-black text-cyan-400">ONLINE</p>
-            </div>
-        </section>
-
-        <div class="w-full bg-cyan-950/10 border-y border-white/5 py-3 mb-12 overflow-hidden">
-            <div class="ticker-text text-[10px] font-black uppercase tracking-[0.3em] text-cyan-400">
-                +++ NEW UPDATE: ADD SERVER & FIXED +++ FAST STREAMING +++ JOIN OUR COMUNITY FOR REQUEST +++
+        <div class="mb-16">
+            <div class="bg-gradient-to-br from-white/5 to-transparent border border-white/5 p-10 rounded-[40px] text-center relative overflow-hidden">
+                <div class="absolute -top-10 -right-10 w-32 h-32 bg-cyan-500/10 blur-3xl"></div>
+                <p class="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-3">Cloud Transmissions</p>
+                <h3 class="text-6xl font-black text-white tracking-tighter" id="download-count">0</h3>
+                <p class="text-[10px] font-bold text-cyan-500/60 mt-2 uppercase">Successful Downloads</p>
             </div>
         </div>
 
-        <section id="work" class="px-6 max-w-7xl mx-auto pb-40">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                <div class="ios-card">
-                    <div class="video-container"><video autoplay muted loop playsinline><source src="https://files.catbox.moe/7sirzz.mp4"></video></div>
-                    <div class="p-8"><h4 class="font-bold text-xl mb-6">Nonton Anime</h4><a href="https://s7.nontonanimeid.boats/" class="btn-opening"><i class="fas fa-play"></i> Launch Anime</a></div>
+        <section id="work" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            <div class="ios-card">
+                <div class="video-container"><video autoplay muted loop playsinline><source src="https://files.catbox.moe/7sirzz.mp4"></video></div>
+                <div class="p-8">
+                    <h4 class="font-extrabold text-xl mb-6 tracking-tight uppercase">Nonton Anime</h4>
+                    <a href="https://s7.nontonanimeid.boats/" class="btn-opening"><i class="fas fa-bolt"></i> TONTON ANIME</a>
                 </div>
-                <div class="ios-card">
-                    <div class="video-container"><video autoplay muted loop playsinline><source src="https://files.catbox.moe/j53hpm.mp4"></video></div>
-                    <div class="p-8"><h4 class="font-bold text-xl mb-6">Nonton Donghua</h4><a href="https://donghuastream.org/" class="btn-opening"><i class="fas fa-dragon"></i> Launch Donghua</a></div>
-                </div>
-                <div class="ios-card">
-                    <div class="video-container"><video autoplay muted loop playsinline><source src="https://files.catbox.moe/ujyd9u.mp4"></video></div>
-                    <div class="p-8"><h4 class="font-bold text-xl mb-6">Tonton Film</h4><a href="https://tv6.lk21official.cc/" class="btn-opening"><i class="fas fa-film"></i> Launch Cinema</a></div>
-                </div>
-                <div class="ios-card">
-                    <div class="video-container"><video autoplay muted loop playsinline><source src="https://files.catbox.moe/yfpund.mp4"></video></div>
-                    <div class="p-8"><h4 class="font-bold text-xl mb-6">Baca Manga</h4><a href="https://komiku.org/" class="btn-opening"><i class="fas fa-book-open"></i> Lihat Manga</a></div>
-                </div>
-                <div class="ios-card">
-                    <div class="video-container"><video autoplay muted loop playsinline><source src="https://files.catbox.moe/ujyd9u.mp4"></video></div>
-                    <div class="p-8"><h4 class="font-bold text-xl mb-6">Download App</h4><a href="https://www.mediafire.com/file/6vlo63sdgz2jq66/Movie_Box_Premium.apk/file" class="btn-opening"><i class="fas fa-download"></i> Get MovieBox</a></div>
-                </div>
-                <div class="ios-card">
-                    <div class="video-container"><video autoplay muted loop playsinline><source src="https://files.catbox.moe/kc3f3z.mp4"></video></div>
-                    <div class="p-8"><h4 class="font-bold text-xl mb-6">Grup Chat</h4><a href="https://chat.whatsapp.com/EKSZJRvIMpW8sZKsxanpuD" class="btn-opening"><i class="fab fa-whatsapp"></i> Join Team</a></div>
-                </div>
+            </div>
+            <div class="ios-card">
+                <div class="video-container"><video autoplay muted loop playsinline><source src="https://files.catbox.moe/j53hpm.mp4"></video></div>
+                <div class="p-8"><h4 class="font-extrabold text-xl mb-6 tracking-tight uppercase">Nonton Donghua</h4><a href="https://donghuastream.org/" class="btn-opening"><i class="fas fa-dragon"></i> TONTON DONGHUA</a></div>
+            </div>
+            <div class="ios-card">
+                <div class="video-container"><video autoplay muted loop playsinline><source src="https://files.catbox.moe/ujyd9u.mp4"></video></div>
+                <div class="p-8"><h4 class="font-extrabold text-xl mb-6 tracking-tight uppercase">Tonton Film</h4><a href="https://tv6.lk21official.cc/" class="btn-opening"><i class="fas fa-film"></i> TONTON FLIM</a></div>
+            </div>
+            <div class="ios-card">
+                <div class="video-container"><video autoplay muted loop playsinline><source src="https://files.catbox.moe/yfpund.mp4"></video></div>
+                <div class="p-8"><h4 class="font-extrabold text-xl mb-6 tracking-tight uppercase">Baca Manga</h4><a href="https://komiku.org/" class="btn-opening"><i class="fas fa-book-open"></i> BACA MANGA</a></div>
+            </div>
+            <div class="ios-card">
+                <div class="video-container"><video autoplay muted loop playsinline><source src="https://files.catbox.moe/ujyd9u.mp4"></video></div>
+                <div class="p-8"><h4 class="font-extrabold text-xl mb-6 tracking-tight uppercase">Download App</h4><a href="https://www.mediafire.com/file/6vlo63sdgz2jq66/Movie_Box_Premium.apk/file" class="btn-opening"><i class="fas fa-download"></i> DOWLOAD MOVIE BOX</a></div>
+            </div>
+            <div class="ios-card">
+                <div class="video-container"><video autoplay muted loop playsinline><source src="https://files.catbox.moe/kc3f3z.mp4"></video></div>
+                <div class="p-8"><h4 class="font-extrabold text-xl mb-6 tracking-tight uppercase">Grup Chat</h4><a href="https://chat.whatsapp.com/EKSZJRvIMpW8sZKsxanpuD" class="btn-opening"><i class="fab fa-whatsapp"></i> JOIN MAIN FRAME</a></div>
             </div>
         </section>
     </main>
 
     <script>
-        // Music Logic
         const music = document.getElementById('bgMusic');
         const mIcon = document.getElementById('music-icon');
         function toggleMusic() {
-            if (music.paused) { music.play(); mIcon.className = "fas fa-pause"; }
-            else { music.pause(); mIcon.className = "fas fa-play"; }
+            if (music.paused) { music.play(); mIcon.className = "fas fa-pause text-cyan-400"; }
+            else { music.pause(); mIcon.className = "fas fa-play text-white"; }
         }
 
-        // DNS Modal Logic
-        function openDns() { document.getElementById('dns-modal').classList.add('active'); }
-        function closeDns() { document.getElementById('dns-modal').classList.remove('active'); }
         function copyDns(text) {
             navigator.clipboard.writeText(text);
-            alert("DNS Copied: " + text + "\nSilakan tempel di setting Private DNS HP Anda.");
+            alert("DNS Protocol Copied!");
         }
 
-        // Refresh Logic
-        function refreshServer(btn) {
-            const icon = btn.querySelector('i');
-            icon.classList.add('loading-spin');
-            setTimeout(() => { icon.classList.remove('loading-spin'); alert('Server Synchronized!'); }, 1500);
-        }
-
-        // Rain & Menu
         const rain = document.getElementById('rain-container');
-        for (let i = 0; i < 80; i++) {
+        for (let i = 0; i < 40; i++) {
             const drop = document.createElement('div');
             drop.className = 'drop';
             drop.style.left = Math.random() * 100 + 'vw';
-            drop.style.animationDuration = (Math.random() * 0.8 + 0.4) + 's';
+            drop.style.animationDuration = (Math.random() * 0.7 + 0.4) + 's';
             drop.style.animationDelay = Math.random() * 2 + 's';
             rain.appendChild(drop);
         }
 
-        function toggleMenu() {
-            const m = document.getElementById('mobile-menu');
-            const i = document.getElementById('menu-icon');
-            m.classList.toggle('active');
-            i.className = m.classList.contains('active') ? 'fas fa-xmark text-xl text-cyan-400' : 'fas fa-bars-staggered text-xl text-white';
-        }
-
-        const typeText = "Platform streaming gratis dengan berbagai fiture, aplikasi ini masih dalam tahap pengembangan, JADI LAH SALAH SATU PENGGUNA AKTIF.";
-        let typeIdx = 0;
+        const typeText = "SERVER ACCEPT ACCESS.  AUTHORIZATION GRANTED. WELCOME TO HM MODZ STREAM.";
+        let idx = 0;
         function typeWriter() {
-            if (typeIdx < typeText.length) {
-                document.getElementById("typewriter").textContent += typeText.charAt(typeIdx);
-                typeIdx++; setTimeout(typeWriter, 50);
+            if (idx < typeText.length) {
+                document.getElementById("typewriter").innerHTML += typeText.charAt(idx);
+                idx++; setTimeout(typeWriter, 40);
             }
         }
-        window.onload = typeWriter;
+
+        const obs = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const v = entry.target.querySelector('video');
+                if (v) entry.isIntersecting ? v.play() : v.pause();
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.ios-card').forEach(card => obs.observe(card));
+
+        function animateValue(id, start, end, duration) {
+            const obj = document.getElementById(id);
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                obj.innerHTML = Math.floor(progress * (end - start) + start).toLocaleString('id-ID');
+                if (progress < 1) window.requestAnimationFrame(step);
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        window.onload = () => {
+            typeWriter();
+            animateValue("visit-count", 336000, 336900, 2500);
+            animateValue("download-count", 30000, 30137, 2500);
+        };
+
+        setInterval(() => {
+            document.querySelectorAll('iframe, .ads, [id*="google_ads"]').forEach(el => el.remove());
+        }, 2000);
     </script>
 </body>
 </html>
