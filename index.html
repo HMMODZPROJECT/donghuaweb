@@ -191,7 +191,7 @@
             rain.appendChild(drop);
         }
 
-        const typeText = "SERVER ACCEPT ACCESS.  AUTHORIZATION GRANTED. WELCOME TO HM MODZ STREAM.";
+        const typeText = "SERVER ACCEPT ACCESS. AUTHORIZATION GRANTED. WELCOME TO HM MODZ STREAM.";
         let idx = 0;
         function typeWriter() {
             if (idx < typeText.length) {
@@ -210,6 +210,7 @@
 
         function animateValue(id, start, end, duration) {
             const obj = document.getElementById(id);
+            if(!obj) return;
             let startTimestamp = null;
             const step = (timestamp) => {
                 if (!startTimestamp) startTimestamp = timestamp;
@@ -230,5 +231,8 @@
             document.querySelectorAll('iframe, .ads, [id*="google_ads"]').forEach(el => el.remove());
         }, 2000);
     </script>
+    
+    <script src="https://cdn.counter.dev/script.js" data-id="0b53dd2e-fc22-49d1-8e98-142e29badee4" data-utcoffset="7"></script>
 </body>
 </html>
+
