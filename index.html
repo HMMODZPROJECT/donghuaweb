@@ -63,6 +63,8 @@
             gap: 8px; 
             width: 100%; 
             transform: translateZ(20px);
+            cursor: pointer;
+            border: none;
         }
         .btn-opening:hover { filter: brightness(1.2); box-shadow: 0 0 20px rgba(0, 242, 254, 0.4); }
 
@@ -103,6 +105,23 @@
         .msg-text { font-size: 13px; color: #cbd5e1; }
         .chat-input-container { padding: 15px; background: rgba(255,255,255,0.03); border-top: 1px solid rgba(255,255,255,0.05); }
         .chat-input-container input { width: 100%; background: rgba(0,0,0,0.5); border: 1px solid rgba(0, 242, 254, 0.1); border-radius: 15px; padding: 10px; color: white; font-size: 12px; outline: none; margin-bottom: 8px; }
+
+        .req-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 16px;
+            color: white;
+            font-size: 14px;
+            outline: none;
+            transition: 0.3s;
+        }
+        .req-input:focus {
+            border-color: var(--primary);
+            background: rgba(0, 242, 254, 0.05);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.1);
+        }
     </style>
 </head>
 <body onclick="enableAutoplay()">
@@ -160,7 +179,7 @@
         <section class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-10 max-w-2xl mx-auto">
             <div class="stats-box border-white/5 bg-white/5 text-center">
                 <p class="text-[9px] uppercase tracking-[0.2em] text-slate-500 font-bold mb-1">System Version</p>
-                <p class="text-xl font-black text-white">v7.1.1</p>
+                <p class="text-xl font-black text-white">v7.1.4</p>
             </div>
             <div class="stats-box border-cyan-500/20 bg-cyan-500/5 text-center">
                 <p class="text-[9px] uppercase tracking-[0.2em] text-cyan-500 font-bold mb-1">Server Status</p>
@@ -186,12 +205,38 @@
                 <div class="p-8"><h4 class="font-extrabold text-xl mb-6 tracking-tight uppercase">Baca Manga</h4><a href="https://komiku.org/" class="btn-opening"><i class="fas fa-book-open"></i> Baca Manga</a></div>
             </div>
             <div class="ios-card js-tilt">
-                <div class="video-container"><video loop muted playsinline><source src="https://files.catbox.moe/ujyd9u.mp4"></video></div>
-                <div class="p-8"><h4 class="font-extrabold text-xl mb-6 tracking-tight uppercase">Download App</h4><a href="https://www.mediafire.com/file/6vlo63sdgz2jq66/Movie_Box_Premium.apk/file" class="btn-opening"><i class="fas fa-download"></i> DOWNLOAD APK</a></div>
+                <div class="video-container"><video loop muted playsinline><source src="https://files.catbox.moe/kc3f3z.mp4"></video></div>
+                <div class="p-8"><h4 class="font-extrabold text-xl mb-6 tracking-tight uppercase">Movie Box (Premium)</h4><a href="https://www.mediafire.com/file/6vlo63sdgz2jq66/Movie_Box_Premium.apk/file" class="btn-opening"><i class="fas fa-download"></i> DOWNLOAD APK</a></div>
             </div>
             <div class="ios-card js-tilt">
                 <div class="video-container"><video loop muted playsinline><source src="https://files.catbox.moe/kc3f3z.mp4"></video></div>
                 <div class="p-8"><h4 class="font-extrabold text-xl mb-6 tracking-tight uppercase">Grup Chat</h4><a href="https://chat.whatsapp.com/EKSZJRvIMpW8sZKsxanpuD" class="btn-opening"><i class="fab fa-whatsapp"></i> JOIN GROUP</a></div>
+            </div>
+        </section>
+
+        <section class="mt-20 max-w-2xl mx-auto">
+            <div class="ios-card js-tilt p-10 border-cyan-500/30 bg-cyan-500/5">
+                <div class="flex items-center gap-5 mb-8">
+                    <div class="w-14 h-14 rounded-[22px] bg-cyan-500/20 flex items-center justify-center shadow-lg shadow-cyan-500/10">
+                        <i class="fas fa-paper-plane text-cyan-400 text-xl"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-black text-2xl tracking-tight uppercase text-white">Request to Admin</h4>
+                        <p class="text-[10px] text-cyan-500 font-bold tracking-[0.2em] uppercase">Request Server Database</p>
+                    </div>
+                </div>
+                
+                <div class="space-y-5">
+                    <input type="text" id="reqSubject" placeholder="Nama Mu" 
+                        class="req-input">
+                    
+                    <textarea id="reqMessage" placeholder="Tulis Request/Pesan Mu Disini..." 
+                        class="req-input h-40 resize-none"></textarea>
+                    
+                    <button onclick="sendRequestEmail()" class="btn-opening mt-4 py-5 text-sm">
+                        <i class="fas fa-paper-plane"></i> KIRIM KE GMAIL ADMIN
+                    </button>
+                </div>
             </div>
         </section>
     </main>
@@ -292,6 +337,20 @@
             });
         }, { threshold: 0.1 });
         document.querySelectorAll('.ios-card').forEach(card => obs.observe(card));
+
+        window.sendRequestEmail = function() {
+            const subject = document.getElementById('reqSubject').value;
+            const message = document.getElementById('reqMessage').value;
+            const adminEmail = "ownerhmmodz@gmail.com";
+
+            if (!subject || !message) {
+                alert("Woi! Isi dulu nama dan pesannya. Jangan kosong!");
+                return;
+            }
+
+            const mailtoLink = `mailto:${adminEmail}?subject=${encodeURIComponent('[hmmodz-server-request] ' + subject)}&body=${encodeURIComponent(message + '\n\n---\nSent from HM MODZ STREAM APPS')}`;
+            window.location.href = mailtoLink;
+        };
 
         window.onload = () => { 
             typeWriter(); 
