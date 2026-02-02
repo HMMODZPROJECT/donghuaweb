@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stream Server</title>
+    <script src="https://cdn.counter.dev/script.js" data-id="0b53dd2e-fc22-49d1-8e98-142e29badee4" data-utcoffset="7"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+    <style>
+        :root { --primary: #00f2fe; --accent: #3b82f6; --bg-dark: #020617; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; background: var(--bg-dark); color: #f1f5f9; overflow-x: hidden; }
+        #rain-container { position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle at top, #0f172a 0%, #020617 100%); }
+        .drop { position: absolute; width: 1px; height: 35px; background: linear-gradient(transparent, var(--primary)); opacity: 0.15; animation: fall linear infinite; }
+        @keyframes fall { to { transform: translateY(100vh); } }
+        .ios-navbar { background: rgba(2, 6, 23, 0.7); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); position: fixed; top: 0; width: 100%; z-index: 100; }
+        .ios-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); height: 100%; overflow: hidden; }
+        .ios-card:hover { border-color: var(--primary); background: rgba(255, 255, 255, 0.05); transform: translateY(-5px); box-shadow: 0 20px 40px -15px rgba(0, 242, 254, 0.15); }
+        .video-container { width: 100%; height: 160px; background: #000; position: relative; overflow: hidden; }
+        .video-container video { width: 100%; height: 100%; object-fit: cover; opacity: 0.4; }
+        .btn-action { background: linear-gradient(135deg, var(--accent), var(--primary)); color: #0f172a; padding: 12px; border-radius: 16px; font-weight: 800; font-size: 11px; letter-spacing: 0.5px; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; border: none; cursor: pointer; text-transform: uppercase; }
+        .btn-action:hover { filter: brightness(1.1); box-shadow: 0 0 15px rgba(0, 242, 254, 0.3); }
+        .stats-box { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 18px; transition: 0.3s; }
+        .floating-btn { position: fixed; bottom: 25px; right: 25px; z-index: 100; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); cursor: pointer; }
+        .dns-banner { background: linear-gradient(90deg, rgba(0, 242, 254, 0.1), transparent); border-left: 3px solid var(--primary); padding: 12px 20px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; cursor: pointer; }
+    </style>
+</head>
+<body onclick="enableAutoplay()">
+    <div id="rain-container"></div>
+    <audio id="bgMusic" loop preload="none"><source src="https://files.catbox.moe/45y0ja.mp4" type="audio/mpeg"></audio>
+
+    <div id="dns-modal" class="hidden fixed inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-xl" onclick="this.classList.add('hidden')">
+        <div class="bg-slate-900 border border-white/10 p-10 rounded-[40px] w-[90%] max-w-sm text-center" onclick="event.stopPropagation()">
+            <div class="w-16 h-16 bg-cyan-500/20 rounded-full flex items-center justify-center mx-auto mb-6"><i class="fas fa-shield-halved text-cyan-400 text-2xl"></i></div>
+            <h2 class="text-2xl font-black mb-2">Anti-Ads DNS</h2>
+            <p class="text-xs text-slate-400 mb-8">Salin DNS ini ke pengaturan HP-mu untuk memblokir iklan di server.</p>
+            <div class="p-5 bg-white/5 border border-white/10 rounded-2xl cursor-pointer hover:border-cyan-500 transition-all" onclick="copyDns('dns.adguard.com')">
+                <p class="text-[10px] text-cyan-400 font-black tracking-widest mb-1">TAP TO COPY</p>
+                <p class="text-lg font-mono text-white">dns.adguard.com</p>
+            </div>
+        </div>
+    </div>
+
+    <nav class="ios-navbar px-8 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <span class="text-xl font-black italic tracking-tighter uppercase">hmmodz<span class="text-cyan-400">vip</span></span>
+            <button onclick="location.reload()" class="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center border border-white/10"><i class="fas fa-sync-alt text-[10px]"></i></button>
+        </div>
+    </nav>
+
+    <main class="pt-32 px-6 max-w-6xl mx-auto pb-24">
+        <header class="text-center mb-12">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-[9px] font-black text-cyan-400 uppercase tracking-widest mb-6">
+                <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span> HM Server Active
+            </div>
+            <h1 class="text-5xl md:text-7xl font-black italic mb-4 tracking-tighter leading-none uppercase">HM MODZ <br><span class="text-cyan-400">STREAM</span></h1>
+            <p id="typewriter" class="text-slate-400 text-[10px] md:text-xs font-medium tracking-widest uppercase opacity-70 min-h-[20px]"></p>
+        </header>
+
+        <div class="max-w-2xl mx-auto space-y-4 mb-10">
+            <div class="grid grid-cols-2 gap-4">
+                <div class="stats-box flex items-center justify-between">
+                    <div><p class="text-[8px] uppercase text-slate-500 font-bold">System</p><p class="text-lg font-black text-white">v7.1.5</p></div>
+                    <i class="fas fa-microchip text-slate-700"></i>
+                </div>
+                <div class="stats-box flex items-center justify-between cursor-pointer border-cyan-500/20" onclick="alert('System Stable - Auth Success')">
+                    <div><p class="text-[8px] uppercase text-cyan-500 font-bold">Status</p><p class="text-lg font-black text-cyan-400">ONLINE</p></div>
+                    <i class="fas fa-circle-check text-cyan-500/30"></i>
+                </div>
+            </div>
+
+            <div class="dns-banner" onclick="document.getElementById('dns-modal').classList.remove('hidden')">
+                <div class="flex items-center gap-3">
+                    <i class="fas fa-shield-virus text-cyan-400"></i>
+                    <div>
+                        <p class="text-[10px] font-black text-white uppercase">Ad-Block Active</p>
+                        <p class="text-[9px] text-slate-400">Setup dns.adguard.com for better experience</p>
+                    </div>
+                </div>
+                <i class="fas fa-chevron-right text-slate-600 text-xs"></i>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="ios-card js-tilt">
+                <div class="video-container"><video loop muted playsinline><source src="https://files.catbox.moe/7sirzz.mp4"></video></div>
+                <div class="p-6"><h4 class="font-bold text-sm mb-4 uppercase tracking-tight">Nonton Anime</h4><a href="https://s7.nontonanimeid.boats/" class="btn-action"><i class="fas fa-play"></i> Stream</a></div>
+            </div>
+            <div class="ios-card js-tilt">
+                <div class="video-container"><video loop muted playsinline><source src="https://files.catbox.moe/j53hpm.mp4"></video></div>
+                <div class="p-6"><h4 class="font-bold text-sm mb-4 uppercase tracking-tight">Nonton Donghua</h4><a href="https://donghuastream.org/" class="btn-action"><i class="fas fa-dragon"></i> Stream</a></div>
+            </div>
+            <div class="ios-card js-tilt">
+                <div class="video-container"><video loop muted playsinline><source src="https://files.catbox.moe/ujyd9u.mp4"></video></div>
+                <div class="p-6"><h4 class="font-bold text-sm mb-4 uppercase tracking-tight">Tonton Film</h4><a href="https://tv6.lk21official.cc/" class="btn-action"><i class="fas fa-film"></i> Open</a></div>
+            </div>
+            <div class="ios-card js-tilt">
+                <div class="video-container"><video loop muted playsinline><source src="https://files.catbox.moe/yfpund.mp4"></video></div>
+                <div class="p-6"><h4 class="font-bold text-sm mb-4 uppercase tracking-tight">Baca Manga</h4><a href="https://komiku.org/" class="btn-action"><i class="fas fa-book"></i> Read</a></div>
+            </div>
+            <div class="ios-card js-tilt">
+                <div class="video-container"><video loop muted playsinline><source src="https://files.catbox.moe/kc3f3z.mp4"></video></div>
+                <div class="p-6"><h4 class="font-bold text-sm mb-4 uppercase tracking-tight">Movie Box APK</h4><a href="https://www.mediafire.com/file/6vlo63sdgz2jq66/Movie_Box_Premium.apk/file" class="btn-action"><i class="fas fa-download"></i> Get App</a></div>
+            </div>
+            <div class="ios-card js-tilt">
+                <div class="video-container"><video loop muted playsinline><source src="https://files.catbox.moe/avtob5.mp4"></video></div>
+                <div class="p-6"><h4 class="font-bold text-sm mb-4 uppercase tracking-tight">Gorxblx Games</h4><a href="https://gamesystembyhmmodz.netlify.app/" class="btn-action"><i class="fas fa-gamepad"></i> Play</a></div>
+            </div>
+               <div class="ios-card js-tilt">
+                <div class="video-container"><video loop muted playsinline><source src="https://files.catbox.moe/30q3py.mp4"></video></div>
+                <div class="p-6"><h4 class="font-bold text-sm mb-4 uppercase tracking-tight">Nonton Drakor</h4><a href="https://www.viu.com/ott/id/id/category/549/Drama-Korea" class="btn-action"><i class="fas fa-play"></i> Stream</a></div>
+            </div>
+        </div>
+
+        <section class="mt-20 max-w-xl mx-auto">
+            <div class="ios-card p-8 border-cyan-500/20">
+                <h4 class="font-black text-lg uppercase mb-6 text-center">Admin Request</h4>
+                <div class="space-y-4">
+                    <input type="text" id="reqSubject" placeholder="Nama" class="w-100 bg-white/5 border border-white/10 rounded-xl p-4 text-sm outline-none w-full focus:border-cyan-500">
+                    <textarea id="reqMessage" placeholder="Pesan Request..." class="w-100 bg-white/5 border border-white/10 rounded-xl p-4 text-sm outline-none w-full h-32 resize-none focus:border-cyan-500"></textarea>
+                    <button onclick="sendRequestEmail()" class="btn-action py-4">Kirim Request</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="floating-btn" onclick="toggleMusic()"><i id="music-icon" class="fas fa-play text-white text-xs"></i></div>
+
+    <script>
+        const music = document.getElementById('bgMusic');
+        const mIcon = document.getElementById('music-icon');
+        function enableAutoplay() { document.querySelectorAll('video').forEach(v => v.play().catch(()=>{})); }
+        function toggleMusic() {
+            if (music.paused) { music.play(); mIcon.className = "fas fa-pause text-cyan-400"; }
+            else { music.pause(); mIcon.className = "fas fa-play text-white"; }
+        }
+        function copyDns(t) { navigator.clipboard.writeText(t); alert("DNS Protocol Copied!"); }
+        
+        const rain = document.getElementById('rain-container');
+        for (let i = 0; i < 25; i++) {
+            const d = document.createElement('div');
+            d.className = 'drop';
+            d.style.left = Math.random() * 100 + 'vw';
+            d.style.animationDuration = (Math.random() * 1 + 0.5) + 's';
+            rain.appendChild(d);
+        }
+
+        const text = "SERVER AUTHORIZED. ENJOY PREMIUM STREAMING EXPERIENCE.";
+        let idx = 0;
+        function type() {
+            if (idx < text.length) { document.getElementById("typewriter").innerHTML += text.charAt(idx); idx++; setTimeout(type, 50); }
+        }
+
+        window.sendRequestEmail = () => {
+            const s = document.getElementById('reqSubject').value;
+            const m = document.getElementById('reqMessage').value;
+            if (!s || !m) return alert("Lengkapi data!");
+            window.location.href = `mailto:ownerhmmodz@gmail.com?subject=[REQ] ${s}&body=${m}`;
+        };
+
+        window.onload = () => { type(); VanillaTilt.init(document.querySelectorAll(".js-tilt"), { max: 8, speed: 1000, scale: 1.02 }); };
+    </script>
+</body>
+</html>
